@@ -1,0 +1,44 @@
+query ($login: String!, $organizationTypeUser: Boolean!, $first: Int!, $after: String, $privacy: RepositoryPrivacy!, $ownerAffiliations: [RepositoryAffiliation]!, $firstLanguages: Int!, $afterLanguages: String) {
+  user(login: $login) @skip(if: $organizationTypeUser) {
+    repositories(first: $first, after: $after, privacy: $privacy, ownerAffiliations: $ownerAffiliations) {
+      ...RepositoryDefinition
+    }
+    id
+  }
+  organization(login: $login) @include(if: $organizationTypeUser) {
+    repositories(first: $first, after: $after, privacy: $privacy, ownerAffiliations: $ownerAffiliations) {
+      ...RepositoryDefinition
+    }
+  }
+}
+
+fragment RepositoryDefinition on RepositoryConnection {
+  edges {
+    node {
+      id
+      languages(first: $firstLanguages, after: $afterLanguages) {
+        edges {
+          node {
+            name
+          }
+          size
+          cursor
+        }
+        pageInfo {
+          ...PageInfoDefinition
+        }
+      }
+    }
+    cursor
+  }
+  pageInfo {
+    ...PageInfoDefinition
+  }
+}
+
+fragment PageInfoDefinition on PageInfo {
+  endCursor
+  hasNextPage
+  hasPreviousPage
+  startCursor
+}

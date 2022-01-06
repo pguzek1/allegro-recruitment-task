@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "app.graphql.client.jwt.method",
+      "type": "java.lang.String",
+      "description": "Authentication method."
+    },
+    {
+      "name": "app.graphql.client.jwt.token",
+      "type": "java.lang.String",
+      "description": "Authentication token."
+    }
+  ] }
