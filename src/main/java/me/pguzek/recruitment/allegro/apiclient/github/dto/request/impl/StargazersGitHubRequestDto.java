@@ -22,5 +22,5 @@ public class StargazersGitHubRequestDto extends AbstractGitHubRequestDto {
     @Builder.Default
     private long first = 100;
 
-    //TODO: sort by stargazers
+    //TODO: sort by stargazers, if last node on a page has zero stargazers then we dont need to get another page
 }

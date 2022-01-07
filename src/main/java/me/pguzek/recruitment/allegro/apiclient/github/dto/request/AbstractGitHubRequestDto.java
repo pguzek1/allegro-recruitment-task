@@ -6,13 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
-import me.pguzek.recruitment.allegro.apiclient.github.dto.request.impl.PagedRepositoriesGitHubRequestDto;
-import me.pguzek.recruitment.allegro.common.Patterns;
+import me.pguzek.recruitment.allegro.apiclient.github.dto.request.partial.GitHubOwnerAffiliation;
+import me.pguzek.recruitment.allegro.apiclient.github.dto.request.partial.GitHubRepositoryPrivacy;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Data
@@ -21,28 +20,18 @@ import java.util.List;
 public abstract class AbstractGitHubRequestDto {
 
     @NotBlank
-    @Pattern(regexp = Patterns.GITHUB_USERNAME_PATTERN)
     private String login;
 
     @Nullable
-    @Pattern(regexp = Patterns.BASE64_PATTERN)
     private String after;
 
     @Nullable
-    private PagedRepositoriesGitHubRequestDto.Privacy privacy;
+    private GitHubRepositoryPrivacy privacy;
 
     @NotEmpty
-    private List<OwnerAffiliation> ownerAffiliations;
+    private List<GitHubOwnerAffiliation> ownerAffiliations;
 
     private boolean organizationTypeUser;
-
-    public enum Privacy {
-        PUBLIC, PRIVATE
-    }
-
-    public enum OwnerAffiliation {
-        OWNER, COLLABORATOR, ORGANIZATION_MEMBER
-    }
 
     @SneakyThrows(JsonProcessingException.class)
     public AbstractGitHubRequestDto mutateAfterCursor(String endCursor) {

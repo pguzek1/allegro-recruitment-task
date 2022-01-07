@@ -6,8 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import me.pguzek.recruitment.allegro.apiclient.github.dto.request.AbstractGitHubRequestDto;
+import me.pguzek.recruitment.allegro.apiclient.github.dto.request.partial.GitHubSortOrder;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.*;
 
@@ -17,33 +17,15 @@ import javax.validation.constraints.*;
 @SuperBuilder
 public class PagedRepositoriesGitHubRequestDto extends AbstractGitHubRequestDto {
 
-    @NonNull
     @Max(100)
     @Min(1)
     @Builder.Default
     private long first = 30;
 
-    @Nullable
-    private SortOrder orderBy;
-
-    @Builder
-    @Data
-    public static class SortOrder {
-
-        @NonNull
-        private Field field;
-
-        @NonNull
-        private Direction direction;
-
-
-        public enum Field {
-            CREATED_AT, UPDATED_AT, PUSHED_AT, NAME, STARGAZERS
-        }
-
-        public enum Direction {
-            ASC, DESC
-        }
-    }
+    @NonNull
+    private GitHubSortOrder orderBy = GitHubSortOrder.builder()
+            .direction(GitHubSortOrder.Direction.ASC)
+            .field(GitHubSortOrder.Field.CREATED_AT)
+            .build();
 
 }
