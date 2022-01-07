@@ -1,11 +1,11 @@
-query ($login: String!, $organizationTypeUser: Boolean!, $first: Int!, $after: String, $privacy: RepositoryPrivacy, $ownerAffiliations: [RepositoryAffiliation]) {
+query ($login: String!, $organizationTypeUser: Boolean!, $first: Int!, $after: String, $privacy: RepositoryPrivacy, $ownerAffiliations: [RepositoryAffiliation], $orderBy: RepositoryOrder) {
   user(login: $login) @skip(if: $organizationTypeUser) {
-    repositories(first: $first, after: $after, privacy: $privacy, ownerAffiliations: $ownerAffiliations) {
+    repositories(first: $first, after: $after, privacy: $privacy, ownerAffiliations: $ownerAffiliations, orderBy: $orderBy) {
       ...RepositoryDefinition
     }
   }
   organization(login: $login) @include(if: $organizationTypeUser) {
-    repositories(first: $first, after: $after, privacy: $privacy, ownerAffiliations: $ownerAffiliations) {
+    repositories(first: $first, after: $after, privacy: $privacy, ownerAffiliations: $ownerAffiliations, orderBy: $orderBy) {
       ...RepositoryDefinition
     }
   }

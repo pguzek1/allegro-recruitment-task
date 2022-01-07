@@ -39,6 +39,7 @@ public class GraphQLGitHubApiClient implements IGitHubApiClient {
     public Flux<StargazerNode> queryStargazers(@NonNull @Valid StargazersGitHubRequestDto requestDto) {
         return graphQLGitHubExecutor.queryStargazers(requestDto)
                 .onErrorResume(fallback -> graphQLGitHubExecutor.userIsOrganizationFallback(fallback, requestDto, graphQLGitHubExecutor::queryStargazers))
+                // TODO: sort by stargazers, if last node on a page has zero stargazers then we dont need to get another page
                 .expand(x -> graphQLGitHubExecutor.expandToAllPages(x.getRepositories().getPageInfo(), requestDto, graphQLGitHubExecutor::queryStargazers))
                 .flatMapIterable(x -> x.getRepositories().getEdges())
                 .map(RepositoryEdge::getNode);
