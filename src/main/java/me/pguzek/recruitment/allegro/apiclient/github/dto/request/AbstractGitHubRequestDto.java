@@ -1,11 +1,13 @@
 package me.pguzek.recruitment.allegro.apiclient.github.dto.request;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
-import me.pguzek.recruitment.allegro.apiclient.github.dto.request.impl.PagedRepositoryListRequestDto;
+import me.pguzek.recruitment.allegro.apiclient.github.dto.request.impl.PagedRepositoriesGitHubRequestDto;
 import me.pguzek.recruitment.allegro.common.Patterns;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
@@ -26,8 +28,8 @@ public abstract class AbstractGitHubRequestDto {
     @Pattern(regexp = Patterns.BASE64_PATTERN)
     private String after;
 
-    @NonNull
-    private PagedRepositoryListRequestDto.Privacy privacy;
+    @Nullable
+    private PagedRepositoriesGitHubRequestDto.Privacy privacy;
 
     @NotEmpty
     private List<OwnerAffiliation> ownerAffiliations;
@@ -40,5 +42,13 @@ public abstract class AbstractGitHubRequestDto {
 
     public enum OwnerAffiliation {
         OWNER, COLLABORATOR, ORGANIZATION_MEMBER
+    }
+
+    @SneakyThrows(JsonProcessingException.class)
+    public AbstractGitHubRequestDto mutateAfterCursor(String endCursor) {
+        final var objectMapper = new ObjectMapper();
+        final var that = objectMapper.readValue(objectMapper.writeValueAsString(this), this.getClass());
+        that.setAfter(endCursor);
+        return that;
     }
 }

@@ -1,9 +1,7 @@
 package me.pguzek.recruitment.allegro.apiclient.github.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.kickstart.spring.webclient.boot.GraphQLErrorsException;
+import graphql.kickstart.spring.webclient.boot.GraphQLRequest;
 import graphql.kickstart.spring.webclient.boot.GraphQLWebClient;
 import lombok.RequiredArgsConstructor;
 import me.pguzek.recruitment.allegro.apiclient.github.dto.request.AbstractGitHubRequestDto;
@@ -11,10 +9,11 @@ import me.pguzek.recruitment.allegro.apiclient.github.dto.response.LanguagesResp
 import me.pguzek.recruitment.allegro.apiclient.github.dto.response.PagedRepositoryListResponseDto;
 import me.pguzek.recruitment.allegro.apiclient.github.dto.response.StargazersResponseDto;
 import me.pguzek.recruitment.allegro.apiclient.github.dto.response.partial.PageInfo;
+import me.pguzek.recruitment.allegro.apiclient.github.exception.UserNotFoundAppException;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
 import java.util.function.Function;
 
 @Component
@@ -27,53 +26,45 @@ public class GraphQLGitHubExecutor {
 
     private final GraphQLWebClient webClient;
 
+    @NonNull
     public <T> Mono<T> userIsOrganizationFallback(Throwable throwable, AbstractGitHubRequestDto requestDto, Function<AbstractGitHubRequestDto, Mono<T>> delegate) {
-        if (throwable instanceof GraphQLErrorsException) {
-            var graphErrors = ((GraphQLErrorsException) throwable).getErrors();
-
-            // TODO: don't like this one
-            if (graphErrors.size() == 1
-                    && Objects.nonNull(graphErrors.get(0).getPath())
-                    && graphErrors.get(0).getPath().size() == 1
-                    && "user".equals(graphErrors.get(0).getPath().get(0))) {
-                requestDto.setOrganizationTypeUser(true);
-                return delegate.apply(requestDto);
-            }
+        if (UserGraphErrorPredicate.check(throwable, UserGraphErrorPredicate.UserType.USER)) {
+            requestDto.setOrganizationTypeUser(true);
+            return delegate.apply(requestDto)
+                    .onErrorMap(GraphQLErrorsException.class, e -> UserGraphErrorPredicate.check(e, UserGraphErrorPredicate.UserType.ORGANIZATION) ? UserNotFoundAppException.of(e) : e);
         }
         return Mono.error(throwable);
     }
 
-    public <T> Mono<T> expandToAllPages(PageInfo pageInfo, AbstractGitHubRequestDto requestDto, Function<AbstractGitHubRequestDto, Mono<T>> delegate) {
+    @NonNull
+    public <T> Mono<T> expandToAllPages(@NonNull PageInfo pageInfo, @NonNull AbstractGitHubRequestDto requestDto, @NonNull Function<AbstractGitHubRequestDto, Mono<T>> delegate) {
         if (!pageInfo.isHasNextPage()) {
             return Mono.empty();
         }
-
-        AbstractGitHubRequestDto x;
-
-        try {
-            final var objectMapper = new ObjectMapper();
-            x = objectMapper.readValue(objectMapper.writeValueAsString(requestDto), requestDto.getClass());
-        } catch (JsonProcessingException e) {
-            return Mono.error(e);
-        }
-
-        x.setAfter(pageInfo.endCursor);
-        return delegate.apply(x);
+        return delegate.apply(requestDto.mutateAfterCursor(pageInfo.endCursor));
     }
 
-    private <T> Mono<T> sendRequest(String query, AbstractGitHubRequestDto variables, Class<T> returnType) {
-        return webClient.post(query, new ObjectMapper().convertValue(variables, new TypeReference<>() {}), returnType);
+    @NonNull
+    private <T> Mono<T> sendRequest(@NonNull String query, @NonNull AbstractGitHubRequestDto variables, @NonNull Class<T> returnType) {
+        return webClient.post(GraphQLRequest.builder().resource(query).variables(variables).build())
+                .flatMap(x -> {
+                    x.validateNoErrors();
+                    return Mono.justOrEmpty(x.getFirst(returnType));
+                });
     }
 
-    public Mono<PagedRepositoryListResponseDto> queryPagedRepositories(AbstractGitHubRequestDto variables) {
+    @NonNull
+    public Mono<PagedRepositoryListResponseDto> queryPagedRepositories(@NonNull AbstractGitHubRequestDto variables) {
         return sendRequest(QUERY_USER_REPOSITORIES, variables, PagedRepositoryListResponseDto.class);
     }
 
-    public Mono<StargazersResponseDto> queryStargazers(AbstractGitHubRequestDto variables) {
+    @NonNull
+    public Mono<StargazersResponseDto> queryStargazers(@NonNull AbstractGitHubRequestDto variables) {
         return sendRequest(QUERY_STARGAZERS, variables, StargazersResponseDto.class);
     }
 
-    public Mono<LanguagesResponseDto> queryLanguages(AbstractGitHubRequestDto variables) {
+    @NonNull
+    public Mono<LanguagesResponseDto> queryLanguages(@NonNull AbstractGitHubRequestDto variables) {
         return sendRequest(QUERY_REPOSITORY_LANGUAGES, variables, LanguagesResponseDto.class);
     }
 }

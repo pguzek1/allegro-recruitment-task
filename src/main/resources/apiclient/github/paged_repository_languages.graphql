@@ -1,4 +1,4 @@
-query ($login: String!, $organizationTypeUser: Boolean!, $first: Int!, $after: String, $privacy: RepositoryPrivacy!, $ownerAffiliations: [RepositoryAffiliation]!, $firstLanguages: Int!, $afterLanguages: String) {
+query ($login: String!, $organizationTypeUser: Boolean!, $first: Int!, $after: String, $privacy: RepositoryPrivacy, $ownerAffiliations: [RepositoryAffiliation], $firstLanguages: Int!, $afterLanguages: String) {
   user(login: $login) @skip(if: $organizationTypeUser) {
     repositories(first: $first, after: $after, privacy: $privacy, ownerAffiliations: $ownerAffiliations) {
       ...RepositoryDefinition

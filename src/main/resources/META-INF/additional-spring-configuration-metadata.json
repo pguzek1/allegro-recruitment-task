@@ -9,5 +9,10 @@
       "name": "app.graphql.client.jwt.token",
       "type": "java.lang.String",
       "description": "Authentication token."
+    },
+    {
+      "name": "app.graphql.client.header.accept",
+      "type": "java.lang.String",
+      "description": "Accept header with schema version."
     }
   ] }

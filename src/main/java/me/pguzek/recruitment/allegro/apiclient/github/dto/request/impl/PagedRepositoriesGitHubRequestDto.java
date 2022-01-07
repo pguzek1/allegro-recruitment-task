@@ -9,27 +9,41 @@ import me.pguzek.recruitment.allegro.apiclient.github.dto.request.AbstractGitHub
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @SuperBuilder
-public class LanguagesRequestDto extends AbstractGitHubRequestDto {
-    @NonNull
-    @Max(100)
-    @Min(1)
-    @Builder.Default
-    private long first = 100;
+public class PagedRepositoriesGitHubRequestDto extends AbstractGitHubRequestDto {
 
     @NonNull
     @Max(100)
     @Min(1)
     @Builder.Default
-    private long firstLanguages = 100;
+    private long first = 30;
 
     @Nullable
-    private String afterLanguages;
+    private SortOrder orderBy;
+
+    @Builder
+    @Data
+    public static class SortOrder {
+
+        @NonNull
+        private Field field;
+
+        @NonNull
+        private Direction direction;
+
+
+        public enum Field {
+            CREATED_AT, UPDATED_AT, PUSHED_AT, NAME, STARGAZERS
+        }
+
+        public enum Direction {
+            ASC, DESC
+        }
+    }
 
 }

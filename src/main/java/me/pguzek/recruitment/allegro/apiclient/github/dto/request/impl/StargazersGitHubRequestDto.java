@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @SuperBuilder
-public class StargazersRequestDto extends AbstractGitHubRequestDto {
+public class StargazersGitHubRequestDto extends AbstractGitHubRequestDto {
     @NonNull
     @Max(100)
     @Min(1)
