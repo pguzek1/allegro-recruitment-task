@@ -52,7 +52,7 @@ public class GraphQLGitHubExecutor {
         if (!pageInfo.isHasNextPage()) {
             return Mono.empty();
         }
-        return delegate.apply(requestDto.mutateAfterCursor(pageInfo.endCursor));
+        return delegate.apply(requestDto.mutateAfterCursor(pageInfo.getEndCursor()));
     }
 
     @NonNull
