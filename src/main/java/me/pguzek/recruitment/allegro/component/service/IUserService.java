@@ -16,12 +16,9 @@ import javax.validation.Valid;
 @Service
 public interface IUserService {
 
-    @NonNull
     Mono<PagedRepositoryResponseDto> getPagedRepositories(@NonNull @Valid PagedRepositoriesCriteria user);
 
-    @NonNull
     Mono<TotalStargazerResponseDto> getStargazerSum(@NonNull @Valid StargazerSumCriteria user);
 
-    @NonNull
     Flux<ByteLanguageNodeResponseDto> getLanguages(@NonNull @Valid LanguagesCriteria user);
 }

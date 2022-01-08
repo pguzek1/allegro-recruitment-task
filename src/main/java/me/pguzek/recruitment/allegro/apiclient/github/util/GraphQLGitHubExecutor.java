@@ -26,8 +26,19 @@ public class GraphQLGitHubExecutor {
 
     private final GraphQLWebClient webClient;
 
+    /**
+     * GraphQL GitHub api distinguishes user and organizations, that not happen in REST API, so you could fetch data from
+     * `https://api.github.com/users/allegro` and it will work but fetching the same data using graphql's `user(login: "allegro")` will fail.
+     * This method provides fallback for that action.
+     *
+     * @param throwable exception that occured during fetching data
+     * @param requestDto variables sent to graphql api
+     * @param delegate method that should be repeated
+     * @param <T> type returned in mono
+     * @return fallback from user to organization and fetch again, otherwise error signal
+     */
     @NonNull
-    public <T> Mono<T> userIsOrganizationFallback(Throwable throwable, AbstractGitHubRequestDto requestDto, Function<AbstractGitHubRequestDto, Mono<T>> delegate) {
+    public <T> Mono<T> userMightBeOrganizationFallback(Throwable throwable, AbstractGitHubRequestDto requestDto, Function<AbstractGitHubRequestDto, Mono<T>> delegate) {
         if (UserGraphErrorPredicate.check(throwable, UserGraphErrorPredicate.UserType.USER)) {
             requestDto.setOrganizationTypeUser(true);
             return delegate.apply(requestDto)
@@ -37,7 +48,7 @@ public class GraphQLGitHubExecutor {
     }
 
     @NonNull
-    public <T> Mono<T> expandToAllPages(@NonNull PageInfo pageInfo, @NonNull AbstractGitHubRequestDto requestDto, @NonNull Function<AbstractGitHubRequestDto, Mono<T>> delegate) {
+    public <T> Mono<T> expandQueryToAllPages(@NonNull PageInfo pageInfo, @NonNull AbstractGitHubRequestDto requestDto, @NonNull Function<AbstractGitHubRequestDto, Mono<T>> delegate) {
         if (!pageInfo.isHasNextPage()) {
             return Mono.empty();
         }

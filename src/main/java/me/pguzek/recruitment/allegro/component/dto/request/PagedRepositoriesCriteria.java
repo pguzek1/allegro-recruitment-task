@@ -20,7 +20,7 @@ public class PagedRepositoriesCriteria extends AbstractRequestCriteria {
 
     @Max(100)
     @Min(1)
-    private long count = 30;
+    private long perPage = 30;
 
     @Nullable
     private String after;
@@ -35,9 +35,9 @@ public class PagedRepositoriesCriteria extends AbstractRequestCriteria {
         return PagedRepositoriesGitHubRequestDto.builder()
                 .login(getUser())
                 .privacy(RepositoryPrivacy.to(getPrivacy()))
-                .ownerAffiliations(OwnerAffiliation.to(this.getOwnerAffiliations()))
-                .first(getCount())
-                .after(this.getAfter())
+                .ownerAffiliations(OwnerAffiliation.to(getOwnerAffiliations()))
+                .first(getPerPage())
+                .after(getAfter())
                 .orderBy(PagedRepositoriesSort.to(direction, orderBy))
                 .build();
     }

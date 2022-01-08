@@ -23,6 +23,7 @@ public class PagedRepositoriesGitHubRequestDto extends AbstractGitHubRequestDto 
     private long first = 30;
 
     @NonNull
+    @Builder.Default
     private GitHubSortOrder orderBy = GitHubSortOrder.builder()
             .direction(GitHubSortOrder.Direction.ASC)
             .field(GitHubSortOrder.Field.CREATED_AT)

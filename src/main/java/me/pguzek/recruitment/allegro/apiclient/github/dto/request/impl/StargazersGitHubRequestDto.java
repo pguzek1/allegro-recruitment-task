@@ -17,12 +17,12 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 @SuperBuilder
 public class StargazersGitHubRequestDto extends AbstractGitHubRequestDto {
-    @NonNull
     @Max(100)
     @Min(1)
     @Builder.Default
     private long first = 100;
 
+    @NonNull
     @Builder.Default
     private GitHubSortOrder orderBy = GitHubSortOrder.builder()
             .field(GitHubSortOrder.Field.STARGAZERS)

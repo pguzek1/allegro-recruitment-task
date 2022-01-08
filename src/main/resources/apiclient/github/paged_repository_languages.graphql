@@ -16,7 +16,7 @@ fragment RepositoryDefinition on RepositoryConnection {
   edges {
     node {
       id
-      languages(first: $firstLanguages, after: $afterLanguages) {
+      languages(first: $firstLanguages, after: $afterLanguages, orderBy: {field: SIZE, direction: DESC}) {
         edges {
           node {
             name

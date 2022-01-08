@@ -27,33 +27,30 @@ public class GraphQLGitHubApiClient implements IGitHubApiClient {
 
     private final GraphQLGitHubExecutor graphQLGitHubExecutor;
 
-    @NonNull
     @Override
     public Mono<PagedRepositoryListResponseDto> queryPagedRepositories(@NonNull @Valid PagedRepositoriesGitHubRequestDto requestDto) {
         return graphQLGitHubExecutor.queryPagedRepositories(requestDto)
-                .onErrorResume(fallback -> graphQLGitHubExecutor.userIsOrganizationFallback(fallback, requestDto, graphQLGitHubExecutor::queryPagedRepositories));
+                .onErrorResume(fallback -> graphQLGitHubExecutor.userMightBeOrganizationFallback(fallback, requestDto, graphQLGitHubExecutor::queryPagedRepositories));
     }
 
-    @NonNull
     @Override
     public Flux<StargazerNode> queryStargazers(@NonNull @Valid StargazersGitHubRequestDto requestDto) {
         return graphQLGitHubExecutor.queryStargazers(requestDto)
-                .onErrorResume(fallback -> graphQLGitHubExecutor.userIsOrganizationFallback(fallback, requestDto, graphQLGitHubExecutor::queryStargazers))
-                // TODO: sort by stargazers, if last node on a page has zero stargazers then we dont need to get another page
-                .expand(x -> graphQLGitHubExecutor.expandToAllPages(x.getRepositories().getPageInfo(), requestDto, graphQLGitHubExecutor::queryStargazers))
+                .onErrorResume(fallback -> graphQLGitHubExecutor.userMightBeOrganizationFallback(fallback, requestDto, graphQLGitHubExecutor::queryStargazers))
+                // TODO: sort by stargazers, if last node on a page has zero stargazers then no need to get another page
+                .expand(x -> graphQLGitHubExecutor.expandQueryToAllPages(x.getRepositories().getPageInfo(), requestDto, graphQLGitHubExecutor::queryStargazers))
                 .flatMapIterable(x -> x.getRepositories().getEdges())
                 .map(RepositoryEdge::getNode);
     }
 
-    @NonNull
     @Override
     public Flux<SizeableRepositoryEdge<LanguageNode>> queryLanguages(@NonNull @Valid LanguagesGitHubRequestDto requestDto) {
         return graphQLGitHubExecutor.queryLanguages(requestDto)
-                .onErrorResume(fallback -> graphQLGitHubExecutor.userIsOrganizationFallback(fallback, requestDto, graphQLGitHubExecutor::queryLanguages))
-                .expand(x -> graphQLGitHubExecutor.expandToAllPages(x.getRepositories().getPageInfo(), requestDto, graphQLGitHubExecutor::queryLanguages))
+                .onErrorResume(fallback -> graphQLGitHubExecutor.userMightBeOrganizationFallback(fallback, requestDto, graphQLGitHubExecutor::queryLanguages))
+                .expand(x -> graphQLGitHubExecutor.expandQueryToAllPages(x.getRepositories().getPageInfo(), requestDto, graphQLGitHubExecutor::queryLanguages))
                 .flatMapIterable(x -> x.getRepositories().getEdges())
                 .map(RepositoryEdge::getNode)
-                // TODO: repository might have more than 100 languages
+                // TODO: LanguageList is a RepositoryEntry that is limited to 100 entries, if there is another page fetch it
                 .filter(x -> Objects.nonNull(x.getLanguages().getEdges()))
                 .flatMapIterable(x -> x.getLanguages().getEdges());
     }

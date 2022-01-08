@@ -17,13 +17,10 @@ import javax.validation.Valid;
 @Component
 public interface IGitHubApiClient {
 
-    @NonNull
     Mono<PagedRepositoryListResponseDto> queryPagedRepositories(@NonNull @Valid PagedRepositoriesGitHubRequestDto requestDto);
 
-    @NonNull
     Flux<StargazerNode> queryStargazers(@NonNull @Valid StargazersGitHubRequestDto requestDto);
 
-    @NonNull
     Flux<SizeableRepositoryEdge<LanguageNode>> queryLanguages(@NonNull @Valid LanguagesGitHubRequestDto requestDto);
 
 }

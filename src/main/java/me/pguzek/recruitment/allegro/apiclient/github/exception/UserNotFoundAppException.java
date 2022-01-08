@@ -1,6 +1,7 @@
 package me.pguzek.recruitment.allegro.apiclient.github.exception;
 
 import me.pguzek.recruitment.allegro.exception.AppException;
+import org.springframework.lang.NonNull;
 
 public class UserNotFoundAppException extends AppException {
 
@@ -14,7 +15,7 @@ public class UserNotFoundAppException extends AppException {
         super(message, cause);
     }
 
-    public static UserNotFoundAppException of(Throwable cause) {
+    public static UserNotFoundAppException of(@NonNull Throwable cause) {
         return new UserNotFoundAppException(USER_NOT_FOUND, cause);
     }
 }
