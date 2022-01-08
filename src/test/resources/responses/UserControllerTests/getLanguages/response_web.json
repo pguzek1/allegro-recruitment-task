@@ -1,0 +1,182 @@
+[
+  {
+    "languageName": "Handlebars",
+    "totalBytes": 24
+  },
+  {
+    "languageName": "Puppet",
+    "totalBytes": 51
+  },
+  {
+    "languageName": "IDL",
+    "totalBytes": 110
+  },
+  {
+    "languageName": "M4",
+    "totalBytes": 295
+  },
+  {
+    "languageName": "PigLatin",
+    "totalBytes": 328
+  },
+  {
+    "languageName": "Smarty",
+    "totalBytes": 462
+  },
+  {
+    "languageName": "PureBasic",
+    "totalBytes": 472
+  },
+  {
+    "languageName": "KiCad Layout",
+    "totalBytes": 475
+  },
+  {
+    "languageName": "Myghty",
+    "totalBytes": 936
+  },
+  {
+    "languageName": "Genshi",
+    "totalBytes": 946
+  },
+  {
+    "languageName": "Ruby",
+    "totalBytes": 10644
+  },
+  {
+    "languageName": "Jinja",
+    "totalBytes": 11869
+  },
+  {
+    "languageName": "HCL",
+    "totalBytes": 12307
+  },
+  {
+    "languageName": "Emacs Lisp",
+    "totalBytes": 13111
+  },
+  {
+    "languageName": "PLSQL",
+    "totalBytes": 13774
+  },
+  {
+    "languageName": "Batchfile",
+    "totalBytes": 14319
+  },
+  {
+    "languageName": "Groff",
+    "totalBytes": 14877
+  },
+  {
+    "languageName": "Dockerfile",
+    "totalBytes": 14970
+  },
+  {
+    "languageName": "Rust",
+    "totalBytes": 23058
+  },
+  {
+    "languageName": "Lua",
+    "totalBytes": 30025
+  },
+  {
+    "languageName": "VCL",
+    "totalBytes": 39945
+  },
+  {
+    "languageName": "TeX",
+    "totalBytes": 126420
+  },
+  {
+    "languageName": "Makefile",
+    "totalBytes": 132856
+  },
+  {
+    "languageName": "Perl",
+    "totalBytes": 138710
+  },
+  {
+    "languageName": "Scala",
+    "totalBytes": 224660
+  },
+  {
+    "languageName": "Swift",
+    "totalBytes": 235635
+  },
+  {
+    "languageName": "Thrift",
+    "totalBytes": 259970
+  },
+  {
+    "languageName": "SCSS",
+    "totalBytes": 337027
+  },
+  {
+    "languageName": "Shell",
+    "totalBytes": 338163
+  },
+  {
+    "languageName": "PHP",
+    "totalBytes": 390788
+  },
+  {
+    "languageName": "XSLT",
+    "totalBytes": 516845
+  },
+  {
+    "languageName": "CSS",
+    "totalBytes": 751655
+  },
+  {
+    "languageName": "Groovy",
+    "totalBytes": 1055351
+  },
+  {
+    "languageName": "Kotlin",
+    "totalBytes": 1070229
+  },
+  {
+    "languageName": "Starlark",
+    "totalBytes": 1523500
+  },
+  {
+    "languageName": "TypeScript",
+    "totalBytes": 2275452
+  },
+  {
+    "languageName": "Mako",
+    "totalBytes": 2441181
+  },
+  {
+    "languageName": "Jupyter Notebook",
+    "totalBytes": 2767347
+  },
+  {
+    "languageName": "C",
+    "totalBytes": 3266731
+  },
+  {
+    "languageName": "Go",
+    "totalBytes": 4460734
+  },
+  {
+    "languageName": "Java",
+    "totalBytes": 5078308
+  },
+  {
+    "languageName": "JavaScript",
+    "totalBytes": 20830703
+  },
+  {
+    "languageName": "C++",
+    "totalBytes": 24962275
+  },
+  {
+    "languageName": "HTML",
+    "totalBytes": 25150863
+  },
+  {
+    "languageName": "Python",
+    "totalBytes": 47464656
+  }
+]
