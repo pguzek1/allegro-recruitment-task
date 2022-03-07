@@ -14,10 +14,10 @@ Do zbudowania aplikacji wykorzystano następujące biblioteki:
 * [Lombok](https://projectlombok.org/)
 * [Reactor Test](https://projectreactor.io/)
 
-## Wersja demonstracyjna aplikacji
-Wersja demonstracyjna aplikacji została uruchomina w usłudze Heroku, można ją znaleźć pod adresem:
+## ~~Wersja demonstracyjna aplikacji~~
+~~Wersja demonstracyjna aplikacji została uruchomina w usłudze Heroku, można ją znaleźć pod adresem:~~
 
-* [https://pguzek1-allegro-rt.herokuapp.com/](https://pguzek1-allegro-rt.herokuapp.com/)
+* ~~[https://pguzek1-allegro-rt.herokuapp.com/](https://pguzek1-allegro-rt.herokuapp.com/)~~
 
 
 
@@ -47,24 +47,6 @@ W celu uruchomienia aplikacji, należy w nim otworzyć projekt pobrany z tego re
 ```
 GITHUB_TOKEN=TU_WKLEIC_TOKEN
 ```
-
-
-### gradlew
-W celu uruchomienia aplikacji przy użyciu tej metody, w swojej ulubionej powłoce przejdź do katalogu głownego aplikacji.
-
-W zależności od używanego systemu operacyjnego należy wykorzystać inny plik uruchomieniowy:
-* `Linux` -> `gradlew`
-* `Windows` -> `gradlew.bat`
-
-W powłoce należy w pierwszej kolejności zbudować aplikację poleceniem:
-* `./gradlew build`
-
-Następnie aby uruchomić aplikację należy wykonać polecenie:
-* `./gradlew bootRun --args='--GITHUB_TOKEN=TU_WKLEIC_TOKEN'`
-
-Oneline z pominięciem testów:
-* `./gradlew build bootRun -x test --args='--GITHUB_TOKEN=TU_WKLEIC_TOKEN'`
-
 
 
 ## Endpointy
